@@ -1,14 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
+import javax.validation.constraints.*;
 import lombok.Data;
 
 @Data
 public class User {
-        private Integer id;
-        private String name;
-        private String email;
-        private String login;
-        private String birthday;
+        Integer id;
+        String name;
+        @Email
+        String email;
+        @NotNull
+        String login;
+        String birthday;
 
         public User(){
         };
@@ -18,6 +21,13 @@ public class User {
                 this.name = name;
                 this.email = email;
                 this.login = login;
+                this.birthday = birthday;
+        }
+
+        public User(Integer id, String name, String email, String birthday) {
+                this.id = id;
+                this.name = name;
+                this.email = email;
                 this.birthday = birthday;
         }
 }

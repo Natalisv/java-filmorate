@@ -33,7 +33,7 @@ class FilmorateApplicationTests {
 		filmController.addFilm(film);
 		Film updateFilm = new Film(1,"name2", "description2", "1967-03-25", 150);
 		filmController.updateFilm(updateFilm);
-		assertEquals(updateFilm, filmController.getFilms().get(0), "Film wasn't update");
+		assertEquals(updateFilm, filmController.getFilms().get(0), "Film wasn't updated");
 	}
 
 	@Test
@@ -55,7 +55,7 @@ class FilmorateApplicationTests {
 		userController.addUser(user);
 		User secondUser = new User(1,"name1", "mail@mail.ru", "login2", "1946-08-25");
 		userController.updateUser(secondUser);
-		assertEquals(secondUser, userController.getUsers().get(0));
+		assertEquals(secondUser, userController.getUsers().get(0),"User wasn't updated");
 	}
 
 	@Test
@@ -63,7 +63,7 @@ class FilmorateApplicationTests {
 		userController.addUser(user);
 		User secondUser = new User(2,"name1", "mail@mail.ru", "login2", "1946-08-25");
 		userController.addUser(secondUser);
-		assertEquals(2, userController.getUsers().size());
+		assertEquals(2, userController.getUsers().size(), "Users aren't comming back");
 	}
 
 }

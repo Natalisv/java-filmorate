@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ExistsException;
+import ru.yandex.practicum.filmorate.exception.IdExistsException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -27,17 +29,17 @@ public class FilmController {
         generatedId(film);
             if(films.containsKey(film.getId())){
                 log.error("Film with id= " + film.getId()+ " already in exists");
-                throw new Exception("Film with id= " + film.getId()+ " already in exists");
+                throw new IdExistsException("Film with id= " + film.getId()+ " already in exists");
             }
             if(isContains(film)){
-                throw new Exception("Film already exists");
+                throw new ExistsException("Film already exists");
             }
             if (isValid(film)) {
                 films.put(film.getId(), film);
-                log.debug("Add film");
+                log.debug("Add film: {} ", film);
                 return film;
             } else {
-                log.error("Validation error");
+                log.error("Film doesn't pass validation");
                 throw new ValidationException("Validation error");
             }
     }
@@ -47,17 +49,17 @@ public class FilmController {
         generatedId(film);
             if (isValid(film)) {
                 films.put(film.getId(), film);
-                log.debug("Update film");
+                log.debug("Update film: {}", film);
                 return film;
             } else {
-                log.error("Validation error");
+                log.error("Film doesn't pass validation");
                 throw new ValidationException("Validation error");
             }
     }
 
     @GetMapping
     public List<Film> getFilms() {
-        log.debug("request films");
+        log.debug("Number of movies: "+ films.size());
         return new ArrayList<>(films.values());
     }
 

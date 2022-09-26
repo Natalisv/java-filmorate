@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ExistsException;
+import ru.yandex.practicum.filmorate.exception.IdExistsException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -23,24 +26,24 @@ public class UserController {
     private static final LocalDate dateNow = LocalDate.now();
 
     @PostMapping
-    public User addUser(@RequestBody User user) throws Exception {
+    public User addUser(@Valid @RequestBody User user) throws Exception {
             generatedId(user);
             if(users.containsKey(user.getId())){
                 log.error("User with id= " + user.getId()+ " already in exists");
-                throw new Exception("User with id= " + user.getId()+ " already in exists");
+                throw new IdExistsException("User with id= " + user.getId()+ " already in exists");
             }
             if(isContains(user)){
-                throw new Exception("User already exists");
+                throw new ExistsException("User already exists");
             }
             if (isValid(user)) {
                     if (user.getName() == null) {
                         user.setName(user.getLogin());
                     }
                     users.put(user.getId(), user);
-                    log.debug("Add user");
+                    log.debug("Add user: {}", user);
                     return user;
             } else {
-                log.error("Validation error");
+                log.error("User doesn't pass validation");
                 throw new ValidationException("Validation error");
             }
     }
@@ -53,17 +56,17 @@ public class UserController {
                     user.setName(user.getLogin());
                 }
                 users.put(user.getId(), user);
-                log.debug("Update user");
+                log.debug("Update user: {}", user);
                 return user;
             } else {
-                log.error("Validation error");
+                log.error("User doesn't pass validation");
                 throw new ValidationException("Validation error");
             }
     }
 
     @GetMapping
     public List<User> getUsers() {
-        log.debug("Request users");
+        log.debug("Number of users: "+ users.size());
         return new ArrayList<>(users.values());
     }
 
