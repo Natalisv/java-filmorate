@@ -1,26 +1,30 @@
 package ru.yandex.practicum.filmorate.model;
 
 import javax.validation.constraints.*;
+
+import lombok.Builder;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@Builder
 public class User {
-        Integer id;
+        Long id;
         String name;
         @Email
         String email;
         @NotNull
+        @NotBlank
         String login;
         String birthday;
-        Set<Long> friends = new HashSet<>();
+        List<Long> friends = new ArrayList<>();
 
         public User(){
         };
 
-        public User(Integer id, String name, String email, String login, String birthday) {
+        public User(Long id, String name, String email, String login, String birthday) {
                 this.id = id;
                 this.name = name;
                 this.email = email;
@@ -28,22 +32,19 @@ public class User {
                 this.birthday = birthday;
         }
 
-        public User(Integer id, String name, String email, String birthday) {
+        public User(Long id, String name, String email, String login, String birthday, List<Long> friends) {
                 this.id = id;
                 this.name = name;
                 this.email = email;
+                this.login = login;
                 this.birthday = birthday;
+                this.friends = friends;
         }
 
-        public void addFriend(Long id){
-                friends.add(id);
-        }
-
-        public void deleteFriend(Long id){
-                friends.remove(id);
-        }
-
-        public Set<Long> getFriends(){
-                return friends;
+        public User(String name, String email, String login, String birthday) {
+                this.name = name;
+                this.email = email;
+                this.login = login;
+                this.birthday = birthday;
         }
 }
