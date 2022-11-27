@@ -3,6 +3,9 @@ package ru.yandex.practicum.filmorate.model;
 import javax.validation.constraints.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 public class User {
         Integer id;
@@ -12,6 +15,7 @@ public class User {
         @NotNull
         String login;
         String birthday;
+        Set<Long> friends = new HashSet<>();
 
         public User(){
         };
@@ -29,5 +33,17 @@ public class User {
                 this.name = name;
                 this.email = email;
                 this.birthday = birthday;
+        }
+
+        public void addFriend(Long id){
+                friends.add(id);
+        }
+
+        public void deleteFriend(Long id){
+                friends.remove(id);
+        }
+
+        public Set<Long> getFriends(){
+                return friends;
         }
 }

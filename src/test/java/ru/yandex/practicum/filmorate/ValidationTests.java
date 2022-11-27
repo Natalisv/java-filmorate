@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -13,6 +12,10 @@ import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.util.Set;
 
@@ -34,8 +37,9 @@ public class ValidationTests {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    FilmController filmController = new FilmController();
-    UserController userController = new UserController();
+    FilmController filmController = new FilmController(new FilmService(
+            new InMemoryFilmStorage(), new InMemoryUserStorage()));
+    UserController userController = new UserController(new UserService(new InMemoryUserStorage()));
 
     @BeforeAll
     public static void createValidator() {
@@ -49,7 +53,7 @@ public class ValidationTests {
         notValidName = new Film(1,"", "description", "1995-10-28", 100);
         nullName = new Film(1, "description", "1995-10-28", 100);
         notValidDate = new Film(2,"name", "description", "1895-10-28", 100);
-        notValidDuration = new Film(1,"name", "description", "1895-10-28", -10);
+        notValidDuration = new Film(4,"name", "description", "1895-10-28", -10);
     }
 
     @BeforeAll
@@ -59,7 +63,7 @@ public class ValidationTests {
         emptyEmail = new User(2,"name", "", "login", "1946-08-20");
         notValidLogin = new User(3,"name", "mailmail@.ru", "logi n", "1946-08-20");
         nullLogin = new User(1,"name", "mail@mail.ru", "1946-08-20");
-        notValidBirthday = new User(1,"name", "mailmail@.ru", "login", "2022-09-30");
+        notValidBirthday = new User(5,"name", "mailmail@.ru", "login", "2022-12-30");
     }
 
     @AfterAll
@@ -162,7 +166,7 @@ public class ValidationTests {
 
         final ValidationException exceptionInvalidDuration = assertThrows(
                 ValidationException.class,
-                () -> filmController.updateFilm(notValidDuration)
+                () -> filmController.addFilm(notValidDuration)
         );
         assertEquals("Validation error", exceptionInvalidDuration.getMessage());
     }
@@ -189,9 +193,8 @@ public class ValidationTests {
 
         final ValidationException exceptionInvalidBirthday = assertThrows(
                 ValidationException.class,
-                () -> userController.updateUser(notValidBirthday)
+                () -> userController.addUser(notValidBirthday)
         );
         assertEquals("Validation error", exceptionInvalidBirthday.getMessage());
-
     }
 }
