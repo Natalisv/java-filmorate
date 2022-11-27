@@ -59,6 +59,7 @@ public class FilmDbStorageTest {
     @Test
     public void addFilmTest(){
         Film film = createFilm();
+        film.setId(2L);
         Film savedFilm = filmDbStorage.addFilm(film);
         assertEquals(film, savedFilm);
     }
