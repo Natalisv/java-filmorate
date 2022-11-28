@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
+import ru.yandex.practicum.filmorate.DAO.UserDbStorage;
 
 import java.util.List;
 
@@ -116,4 +116,12 @@ public class UserDbStorageTest {
         assertEquals(commonFriend.get(0), savedUser3);
     }
 
+    @Test
+    public void removeUserTest(){
+        User user = createUser();
+        userDbStorage.addUser(user);
+        userDbStorage.removeUser(user.getId());
+        List<User> usersList = userDbStorage.findAllUsers();
+        assertEquals(usersList.size(), 0);
+    }
 }

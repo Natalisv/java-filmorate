@@ -12,8 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
+import ru.yandex.practicum.filmorate.DAO.FilmDbStorage;
+import ru.yandex.practicum.filmorate.DAO.UserDbStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,5 +108,14 @@ public class FilmDbStorageTest {
         filmDbStorage.removeLike(film.getId(), user.getId());
         Integer filmLikes = filmDbStorage.getLikes(film.getId());
         assertEquals(filmLikes, 0);
+    }
+
+    @Test
+    public void removeFilm(){
+        Film film = createFilm();
+        filmDbStorage.addFilm(film);
+        filmDbStorage.removeFilm(film.getId());
+        List<Film> films = filmDbStorage.findAllFilms();
+        assertEquals(films.size(), 0);
     }
 }

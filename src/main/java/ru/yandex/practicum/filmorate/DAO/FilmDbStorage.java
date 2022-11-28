@@ -1,5 +1,5 @@
 
-package ru.yandex.practicum.filmorate.storage.film;
+package ru.yandex.practicum.filmorate.DAO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
-import ru.yandex.practicum.filmorate.storage.mpa.MpaDbStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -91,6 +90,12 @@ public class FilmDbStorage implements FilmStorage {
     public void removeLike(Long filmId, Long userId) {
         String sqlQuery = "delete from likes where film_id =? AND user_id = ?";
         jdbcTemplate.update(sqlQuery, filmId, userId);
+    }
+
+    @Override
+    public void removeFilm(Long id){
+        String sqlQuery = "delete from films where id =?";
+        jdbcTemplate.update(sqlQuery, id);
     }
 
     private void generatedId(Film film) {

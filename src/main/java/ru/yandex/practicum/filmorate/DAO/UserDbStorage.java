@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.user;
+package ru.yandex.practicum.filmorate.DAO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -93,6 +94,12 @@ public class UserDbStorage implements UserStorage {
         String sqlQuery = "select * from users where id in(select friend_id from friendship where user_id in (?, ?)" +
                 "group by friend_id having count(*) = ?)";
         return jdbcTemplate.query(sqlQuery, this::mapRowToUser, user1Id, user2Id, 2);
+    }
+
+    @Override
+    public void removeUser(Long id){
+        String sqlQuery = "delete from users where id =?";
+        jdbcTemplate.update(sqlQuery, id);
     }
 
     private void generatedId(User user) {

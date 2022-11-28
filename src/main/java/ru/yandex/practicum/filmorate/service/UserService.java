@@ -112,6 +112,10 @@ public class UserService {
         }
     }
 
+    public void removeUser(Long id){
+        userStorage.removeUser(id);
+    }
+
     private boolean isContains(Long userId){
         return userId != null && userId > 0  && userStorage.findUserById(userId) != null;
     }

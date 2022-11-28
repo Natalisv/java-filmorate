@@ -102,6 +102,10 @@ public class FilmService {
         }
     }
 
+    public void removeFilm(Long id){
+        filmStorage.removeFilm(id);
+    }
+
     private boolean isValid(Film film) {
         return !film.getName().isEmpty() && film.getDescription().length() <= 200 &&
                 (LocalDate.parse(film.getReleaseDate(), formatter).isAfter(STARTRELEASE) ||
