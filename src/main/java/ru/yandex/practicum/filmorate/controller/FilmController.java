@@ -23,45 +23,37 @@ public class FilmController {
     //метод добавляет фильм
     @PostMapping
     public Film addFilm(@RequestBody Film film) {
-        filmService.addFilm(film);
-        return film;
+        return filmService.addFilm(film);
     }
 
     //метод изменяет фильм
     @PutMapping
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
-        filmService.updateFilm(film);
-        return film;
+        return filmService.updateFilm(film);
     }
 
     //метод возвращает список фильмов
     @GetMapping
-    public List<Film> getListFilms() {
-        return filmService.getListFilms();
+    public List<Film> findAllFilms() {
+        return filmService.findAllFilms();
     }
 
     //метод возвращает фильм по Id
     @GetMapping("/{id}")
-    public Film getFilmById(@PathVariable Integer id) {
-        return filmService.getFilmById(id);
-    }
-
-    //метод удаляет фильм по Id
-    @DeleteMapping("/{id}")
-    public void deleteFilmById(@PathVariable Integer id) {
-        filmService.deleteFilmById(id);
-    }
-
-    //метод добавляет лайк фильму по его Id
-    @PutMapping("{id}/like/{userId}")
-    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        filmService.addLike(id, userId);
+    public Film findFilmById(@PathVariable Long id) {
+        return filmService.findFilmById(id);
     }
 
     //метод удаляет лайк фильма по его Id
     @DeleteMapping("{id}/like/{userId}")
-    public void deleteLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        filmService.deleteLike(id, userId);
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.removeLike(id, userId);
+    }
+
+    //метод добавляет лайк фильму по его Id
+    @PutMapping("{id}/like/{userId}")
+    public void addLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.addLike(id, userId);
     }
 
     //метод возвращает список популярных фильмов
@@ -69,5 +61,4 @@ public class FilmController {
     public List<Film> getPopularFilms(@RequestParam(required = false) Integer count){
         return filmService.getPopularFilms(count);
     }
-
 }
